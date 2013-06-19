@@ -29,12 +29,21 @@ int main() {
     }
 
     day_submissions[begin] = current;
-    avg_submissions[begin] = 0;
-    for (int i = -10; i <= 0; ++i) {
-      time_t d = begin + i * 24 * 3600;
-      if (day_submissions.count(d) == 1) {
-        avg_submissions[begin] += double(day_submissions[d])/10.0;
-      }
+  }
+
+  for (std::map<time_t, unsigned int>::iterator it(day_submissions.begin()); it != day_submissions.end(); ++it) {
+    avg_submissions[it->first] = double(it->second)/10.0;
+    std::map<time_t, unsigned int>::iterator tmp(it);
+    for (int i = 0; i < 5; ++i) {
+      if (tmp == day_submissions.begin()) break;
+      --tmp;
+      avg_submissions[it->first] += double(tmp->second)/10.0;
+    }
+    tmp = it;
+    for (int i = 0; i < 5; ++i) {
+      ++tmp;
+      if (tmp == day_submissions.end()) break;
+      avg_submissions[it->first] += double(tmp->second)/10.0;
     }
   }
 
